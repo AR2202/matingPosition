@@ -24,6 +24,13 @@ on these features to recognize normal vs. abnormal mating positions
 
 All of the descriptions below assume you have trained a Deep Lab Cut model to recognize the head, abdomen of both flies and shoulders of the male flies and applied that model to your videos. The outpul csv file of the model is the input data to these scripts.
 
+* [calculating the mating angle and tilting index](#matingangle)
+* [Using a script to calculate the median mating angles and tilting indices in a video](#medianma)
+* [Removing frames close to the wall](#removewall)
+* [Training a machine learning model to classify frames](#ml)
+
+<a name=#matingangle></a>
+
 #### calculating the mating angle and tilting index
 
 To calculate the mating angle for each row of your csv file, use the function unfiltered_outputs() from the mating_angles_model2 module:
@@ -42,6 +49,8 @@ To calculate the tilting index, use the function tilting_index from the mating_a
 
 tilting_ind will be an array of your tilting indices. The input arguments are the male wing distance, which can be obtained from the function unfiltered_outputs or filtered_outputs (see above) and the copulationstartframe= the start of your flies' copulation.
 
+<a name=#medianma></a>
+
 #### Using a script to calculate the median mating angles and tilting indices in a video
 
 The sample script  model2_mating_angles can be used to calculate median mating angles and tilting indices. The paths are examples and have to be changed to the actual paths to the data. At the top of the file, change the line:
@@ -50,11 +59,25 @@ to the path of the mating_angles_model2.py file
 
 Additional lines might need to be commented out if you don't have labelled data. You can also change some lines to print, plot or save the mating_angles and tilting_indices.
 
+<a name=#removewall></a>
+
 #### Removing frames close to the wall
 
 The filtered_outputs() and unfiltered_outputs() functions in the mating_angles_model2.py module take the optional keyword arguments removeWall and minWallDist. Defaults are removeWall=False and minWallDist=3. removeWall specifies whether frames where flies are on the side wall should be removed. minWallDist is the minimum distance to the wall (in pixels) that flies should have if frames are to be kept.
 
+<a name=#ml></a>
+
 #### Training a machine learning model to classify frames into 'normal' or 'abnormal' mating positions
+
+* [Creating training data](#traindata)
+* [Training the model](#train)
+* [Training the model from a script](#trainscript)
+* [Loading a pretrained model](#loadmodel)
+* [Evaluating a pretrained model](#evalmodel)
+* [Applying a pretrained model to new data](#applymodel)
+* [Using a script to apply a model](#applyscript)
+
+<a name=#traindata></a>
 
 #### Creating training data
 
@@ -63,6 +86,8 @@ Label some frames in your videos as in the example_labels.csv file. The first ro
 * column 1: copulation start frame for that video (one row only)
 * column 2: normal position frame numbers, pairs of consecutive rows will be interpreted as start and end frame of a normal period
 * column 3: abnormal position frame numbers, pairs of consecutive rows will be interpreted as start and end frame of a normal period
+
+<a name=#train></a>
 
 #### Training the model
 
@@ -76,21 +101,30 @@ featurelist ist an optional argument, you can specify the features you want to u
 
 Select subsets of those features as you wish.
 
+<a name=#trainscript></a>
+
 #### Training the model from a script
 
 The script model2_mating_position.py gives an example of how to train the model. The paths have to be changed.
 
+<a name=#loadmodel></a>
+
 #### Loading a pretrained model
 
 Use the load_pretrained() function from the mating_angles_learn_model2.py module:
+
 `models=load_pretrained(path_to_model)`
+
+<a name=#evalmodel></a>
 
 #### Evaluating a pretrained model on new data
 
 * create new labelled test data as outlined above
 * Use the evaluate_pretrained() function from the mating_angles_learn_model2.py module: 
 
-`scores=evalulate_pretrained(list_of_paths_to_test_csv,list_of_paths_to_test,featurelist=features)`
+    `scores=evalulate_pretrained(list_of_paths_to_test_csv,list_of_paths_to_test,featurelist=features)`
+
+<a name=#applymodel></a>
 
 #### Applying the pretrained model to new data
 
@@ -101,6 +135,8 @@ Use the load_pretrained() function from the mating_angles_learn_model2.py module
 `predictions_data1,fraction1=apply_pretrained(models,data,startframe=copulationstartframe)`
 
 The keyword arguments are optional.
+
+<a name=#applyscript></a>
 
 #### Using a script to evaluate and apply an existing model
 
