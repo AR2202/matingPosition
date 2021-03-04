@@ -1,5 +1,7 @@
 # Short User Guide
 
+<a name="top"></a>
+
 ## fly mating video analysis scripts
 
 This is a collection of python scripts for the analysis of tracked fly mating videos.
@@ -29,6 +31,8 @@ All of the descriptions below assume you have trained a Deep Lab Cut model to re
 * [Removing frames close to the wall](#removewall)
 * [Training a machine learning model to classify frames](#ml)
 
+[Back to top](#top)
+
 <a name="matingangle"></a>
 
 #### calculating the mating angle and tilting index
@@ -49,6 +53,8 @@ To calculate the tilting index, use the function tilting_index from the mating_a
 
 tilting_ind will be an array of your tilting indices. The input arguments are the male wing distance, which can be obtained from the function unfiltered_outputs or filtered_outputs (see above) and the copulationstartframe= the start of your flies' copulation.
 
+[Back to top](#top)
+
 <a name="medianma"></a>
 
 #### Using a script to calculate the median mating angles and tilting indices in a video
@@ -59,11 +65,15 @@ to the path of the mating_angles_model2.py file
 
 Additional lines might need to be commented out if you don't have labelled data. You can also change some lines to print, plot or save the mating_angles and tilting_indices.
 
+[Back to top](#top)
+
 <a name="removewall"></a>
 
 #### Removing frames close to the wall
 
 The filtered_outputs() and unfiltered_outputs() functions in the mating_angles_model2.py module take the optional keyword arguments removeWall and minWallDist. Defaults are removeWall=False and minWallDist=3. removeWall specifies whether frames where flies are on the side wall should be removed. minWallDist is the minimum distance to the wall (in pixels) that flies should have if frames are to be kept.
+
+[Back to top](#top)
 
 <a name="ml"></a>
 
@@ -77,6 +87,10 @@ The filtered_outputs() and unfiltered_outputs() functions in the mating_angles_m
 * [Applying a pretrained model to new data](#applymodel)
 * [Using a script to apply a model](#applyscript)
 
+[Back to top](#top)
+
+[Back to Machine learning model contents](#ml)
+
 <a name="traindata"></a>
 
 #### Creating training data
@@ -86,6 +100,10 @@ Label some frames in your videos as in the example_labels.csv file. The first ro
 * column 1: copulation start frame for that video (one row only)
 * column 2: normal position frame numbers, pairs of consecutive rows will be interpreted as start and end frame of a normal period
 * column 3: abnormal position frame numbers, pairs of consecutive rows will be interpreted as start and end frame of a normal period
+
+[Back to top](#top)
+
+[Back to Machine learning model contents](#ml)
 
 <a name="train"></a>
 
@@ -101,11 +119,17 @@ featurelist ist an optional argument, you can specify the features you want to u
 
 Select subsets of those features as you wish.
 
+[Back to top](#top)
+
+[Back to Machine learning model contents](#ml)
+
 <a name="trainscript"></a>
 
 #### Training the model from a script
 
 The script model2_mating_position.py gives an example of how to train the model. The paths have to be changed.
+
+[Back to top](#top)
 
 <a name="loadmodel"></a>
 
@@ -115,6 +139,10 @@ Use the load_pretrained() function from the mating_angles_learn_model2.py module
 
 `models=load_pretrained(path_to_model)`
 
+[Back to top](#top)
+
+[Back to Machine learning model contents](#ml)
+
 <a name="evalmodel"></a>
 
 #### Evaluating a pretrained model on new data
@@ -123,6 +151,10 @@ Use the load_pretrained() function from the mating_angles_learn_model2.py module
 * Use the evaluate_pretrained() function from the mating_angles_learn_model2.py module: 
 
     `scores=evalulate_pretrained(list_of_paths_to_test_csv,list_of_paths_to_test,featurelist=features)`
+
+[Back to top](#top)
+
+[Back to Machine learning model contents](#ml)
 
 <a name=#applymodel></a>
 
@@ -136,8 +168,16 @@ Use the load_pretrained() function from the mating_angles_learn_model2.py module
 
 The keyword arguments are optional.
 
+[Back to top](#top)
+
+[Back to Machine learning model contents](#ml)
+
 <a name="applyscript"></a>
 
 #### Using a script to evaluate and apply an existing model
 
 The script model2_test_apply.py gives an example of how to train the model. The paths have to be changed.
+
+[Back to top](#top)
+
+[Back to Machine learning model contents](#ml)
