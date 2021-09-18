@@ -36,25 +36,27 @@ def train_and_apply_model2(paths_to_training,
                                   copstartframe=1936,
                                   featurelist=features)
     predictions_data1, fraction1 = apply_pretrained(
-                                   models,
-                                   data1,
-                                   startframe=562
-                                   )
+        models,
+        data1,
+        startframe=562
+    )
     predictions_data2, fraction2 = apply_pretrained(
-                                   models,
-                                   data2,
-                                   startframe=1936
-                                   )
+        models,
+        data2,
+        startframe=1936
+    )
 
-    print("Fraction of abnormal copulation in group 1: {:.2f}".format(fraction1))
-    print("Fraction of abnormal copulation in group 2: {:.2f}".format(fraction2))
+    print(
+        "Fraction of abnormal copulation in group 1: {:.2f}".format(fraction1))
+    print(
+        "Fraction of abnormal copulation in group 2: {:.2f}".format(fraction2))
 
     # model evaluation
 
     print("Evaluating model on new data...")
     scores = evalulate_pretrained(paths_to_test,
-                              paths_to_test_labels,
-                              featurelist=features)
+                                  paths_to_test_labels,
+                                  featurelist=features)
 
     # mating angles
     angles_b, _, _, _, _ = unfiltered_outputs(path_to_data1)
@@ -65,12 +67,18 @@ def train_and_apply_model2(paths_to_training,
     predictions_from_angles_data1[above_cutoff] = 1
     # how the predictions agree between mating angle and the model predictions
 
-    common_predictions = np.equal(predictions_data1, predictions_from_angles_data1)
-    fraction_same_pred = len(common_predictions[common_predictions is True])/len(common_predictions)
-    pred_difference = np.subtract(predictions_data1, predictions_from_angles_data1)
-    fraction_same_pred1 = len(pred_difference[pred_difference == 0])/len(pred_difference)
-    fraction_pos_angles = len(pred_difference[pred_difference == -1])/len(pred_difference)
-    fraction_pos_model = len(pred_difference[pred_difference == 1])/len(pred_difference)
+    common_predictions = np.equal(
+        predictions_data1, predictions_from_angles_data1)
+    fraction_same_pred = len(
+        common_predictions[common_predictions is True])/len(common_predictions)
+    pred_difference = np.subtract(
+        predictions_data1, predictions_from_angles_data1)
+    fraction_same_pred1 = len(
+        pred_difference[pred_difference == 0])/len(pred_difference)
+    fraction_pos_angles = len(
+        pred_difference[pred_difference == -1])/len(pred_difference)
+    fraction_pos_model = len(
+        pred_difference[pred_difference == 1])/len(pred_difference)
     print("predictions matching: {:.2f} or {:.2f}"
           .format(fraction_same_pred, fraction_same_pred1))
     print("model only positives: {:.2f} and angle only positives {:.2f}"
@@ -95,7 +103,7 @@ path_to_labels3 =\
 # test data
 
 path_to_test_labels =\
-    '/Volumes/LaCie/Projects/Matthew/behaviour/Exp4_chamber1.csv'  
+    '/Volumes/LaCie/Projects/Matthew/behaviour/Exp4_chamber1.csv'
 path_to_test_csv =\
     '/Volumes/LaCie/Projects/Matthew/behaviour/R1_Exp4_Chamber1DLC_resnet50_Model3Apr24shuffle1_200000.csv'
 path_to_test_labels2 =\

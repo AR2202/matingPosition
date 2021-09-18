@@ -57,10 +57,10 @@ def scale_filtered(path,
     abd_dist_scaled = scale_angles(abd_dist)
     head_dist_scaled = scale_angles(head_dist)
     tilting_index_scaled = scale_angles(
-                                        tilting_index_all_frames(
-                                            wing_dist_male,
-                                            copstartframe,
-                                            rownumbers=rownumbers))
+        tilting_index_all_frames(
+            wing_dist_male,
+            copstartframe,
+            rownumbers=rownumbers))
     return angles_b_scaled, wing_dist_male_scaled, abd_dist_scaled, head_dist_scaled, tilting_index_scaled
 
 
@@ -98,7 +98,7 @@ def train_SGD(X, y, loss="log"):
     parameters = {
         'sgd__alpha': (0.00001, 0.000001),
         'sgd__penalty': ('l2', 'elasticnet'),
-                 }
+    }
     pipe = Pipeline([('anova', SelectPercentile(chi2)),
                      ('sgd', SGDClassifier(
                          loss=loss,
@@ -131,10 +131,10 @@ def train_SVC(X, y):
     feature selction is done with anova"""
     X_train, X_test, y_train, y_test = train_test_split(X, y)
     param_grid = [
-              {'svc__C': [1, 10, 100, 1000], 'svc__kernel': ['linear']},
-              {'svc__C': [1, 10, 100, 1000], 'svc__gamma': [0.001, 0.0001],
-               'svc__kernel': ['rbf']},
-              ]
+        {'svc__C': [1, 10, 100, 1000], 'svc__kernel': ['linear']},
+        {'svc__C': [1, 10, 100, 1000], 'svc__gamma': [0.001, 0.0001],
+         'svc__kernel': ['rbf']},
+    ]
     pipe = Pipeline([('anova', SelectPercentile(chi2)),
                      ('svc', SVC(probability=True))])
     grid_search = GridSearchCV(pipe, param_grid, verbose=1)
@@ -181,12 +181,12 @@ def prepare_training_data(path, filtering=False, P=0.8, copstartframe=500,
     X = np.array([])
     if filtering:
         angles_b_scaled, wing_dist_male_scaled, abd_dist_scaled, head_dist_scaled, tilting_index_scaled =\
-           scale_filtered(path, P, copstartframe=copstartframe,
-                          removeWall=removeWall, minWallDist=minWallDist)
+            scale_filtered(path, P, copstartframe=copstartframe,
+                           removeWall=removeWall, minWallDist=minWallDist)
     else:
         angles_b_scaled, wing_dist_male_scaled, abd_dist_scaled, head_dist_scaled, tilting_index_scaled =\
-           scale_unfiltered(path, copstartframe=copstartframe,
-                            removeWall=removeWall, minWallDist=minWallDist)
+            scale_unfiltered(path, copstartframe=copstartframe,
+                             removeWall=removeWall, minWallDist=minWallDist)
     # tilting_index=tilting_index_all_frames(wing_dist_male_scaled,
     # wing_dist_female_scaled, copstartframe)
     for feature in featurelist:
@@ -303,7 +303,8 @@ def learning_pipeline(paths_to_csv, paths_to_images, positives=[],
                                  featurelist=featurelist,
                                  copstartframe=copstartframe)
     X_train, X_test, y_train, y_test = train_test_split(X, y)
-    logReg, logRegScore, logRegCVScore = train_SGD(X_train, y_train, loss="log")
+    logReg, logRegScore, logRegCVScore = train_SGD(
+        X_train, y_train, loss="log")
     print("Logistic Regression Test Score: {}".format(logRegScore))
     print("Logistic Regression CV Score: {}".format(logRegCVScore))
     suppVC, SVCScore, SVCCVScore = train_SVC(X_train, y_train)
@@ -312,7 +313,7 @@ def learning_pipeline(paths_to_csv, paths_to_images, positives=[],
     knn, knnScore, knnCVScore = train_knn(X_train, y_train)
     print("K Nearest Neighbors Test Score: {}".format(knnScore))
     print("K Nearest Neighbors CV Score: {}".format(knnCVScore))
-    randomF, randomFScore, randomFCVScore = train_randomForest(X_train, 
+    randomF, randomFScore, randomFCVScore = train_randomForest(X_train,
                                                                y_train)
     print("Random Forest Test Score: {}".format(randomFScore))
     print("Random Forest CV Score: {}".format(randomFCVScore))
@@ -360,7 +361,7 @@ def learning_pipeline(paths_to_csv, paths_to_images, positives=[],
                          "F1": f1,
                          "LogLoss": logloss,
                          "ROCAUC": rocauc}
-            }
+        }
     else:
         # making predictions for the data
         data = prepare_training_data(paths_to_csv[0],
@@ -384,32 +385,32 @@ def learning_pipeline(paths_to_csv, paths_to_images, positives=[],
         classPredictions = np.apply_along_axis(np.argmax, 1,
                                                ensembePredictions)
         models = {
-                  "LogReg": {"model": logReg,
-                             "score": logRegScore,
-                             "CVScore": logRegCVScore,
-                             "predictions": predictionsLogReg},
-                  "SVC": {"model": suppVC,
-                          "score": SVCScore,
-                          "CVScore": SVCCVScore,
-                          "predictions": predictionsSVC},
-                  "KNN": {"model": knn,
-                          "score": knnScore,
-                          "CVScore": knnCVScore,
-                          "predictions": predictionsKnn},
-                  "RFC": {"model": randomF,
-                          "score": randomFScore,
-                          "CVScore": randomFCVScore,
-                          "predictions": predictionsRandomF},
-                  "NB": {"model": NB,
-                         "score": NBScore,
-                        "predictions": predictionsNB},
-                  "ensemble": {"predictions": ensembePredictions,
-                               "classPredictions": classPredictions,
-                               "accuracy": accuracy,
-                               "F1": f1,
-                               "LogLoss": logloss,
-                               "ROCAUC": rocauc}
-                  }
+            "LogReg": {"model": logReg,
+                       "score": logRegScore,
+                       "CVScore": logRegCVScore,
+                       "predictions": predictionsLogReg},
+            "SVC": {"model": suppVC,
+                    "score": SVCScore,
+                    "CVScore": SVCCVScore,
+                    "predictions": predictionsSVC},
+            "KNN": {"model": knn,
+                    "score": knnScore,
+                    "CVScore": knnCVScore,
+                    "predictions": predictionsKnn},
+            "RFC": {"model": randomF,
+                    "score": randomFScore,
+                    "CVScore": randomFCVScore,
+                    "predictions": predictionsRandomF},
+            "NB": {"model": NB,
+                   "score": NBScore,
+                   "predictions": predictionsNB},
+            "ensemble": {"predictions": ensembePredictions,
+                         "classPredictions": classPredictions,
+                         "accuracy": accuracy,
+                         "F1": f1,
+                         "LogLoss": logloss,
+                         "ROCAUC": rocauc}
+        }
     dump(models, filename)
     return models
 
@@ -441,7 +442,7 @@ def apply_pretrained(models, data, startframe=0):
     classPredictions = np.apply_along_axis(np.argmax, 1, ensembePredictions)
     classPredictions = classPredictions[startframe:]
     fraction_positives = len(classPredictions[classPredictions == 1])/len(
-                                                          classPredictions)
+        classPredictions)
     return classPredictions, fraction_positives
 
 
@@ -464,22 +465,22 @@ def evalulate_pretrained(paths_to_csv, paths_to_images, positives=[],
     NB = models["NB"]["model"]
     if testdata_from_csv:
         X_test, y_test, copstartframe = import_train_test_from_csv(
-                                        paths_to_csv, paths_to_images,
-                                        filtering=False, P=0.8,
-                                        removeWall=removeWall,
-                                        minWallDist=minWallDist,
-                                        featurelist=featurelist)
+            paths_to_csv, paths_to_images,
+            filtering=False, P=0.8,
+            removeWall=removeWall,
+            minWallDist=minWallDist,
+            featurelist=featurelist)
     else:
         X_test, y_test = import_train_test(
-                         paths_to_csv,
-                         paths_to_images,
-                         positives,
-                         filtering=False,
-                         P=0.8,
-                         removeWall=removeWall,
-                         minWallDist=minWallDist,
-                         featurelist=featurelist,
-                         copstartframe=copstartframe)
+            paths_to_csv,
+            paths_to_images,
+            positives,
+            filtering=False,
+            P=0.8,
+            removeWall=removeWall,
+            minWallDist=minWallDist,
+            featurelist=featurelist,
+            copstartframe=copstartframe)
     # evaluation of the ensemble model
     predLogReg = logReg.predict_proba(X_test)
     predSVC = suppVC.predict_proba(X_test)
@@ -497,7 +498,8 @@ def evalulate_pretrained(paths_to_csv, paths_to_images, positives=[],
     logloss = log_loss(y_test, yProb)
     rocauc = roc_auc_score(y_test, yProb)
     print("Ensemble Model Accuracy Score: {:.2f}".format(accuracy))
-    print("Ensemble Model Balanced Accuracy Score: {:.2f}".format(balanced_accuracy))
+    print("Ensemble Model Balanced Accuracy Score: {:.2f}".format(
+        balanced_accuracy))
     print("Ensemble Model F1 Score: {:.2f}".format(f1))
     print("Ensemble Model Log Loss Score: {:.2f}".format(logloss))
     print("Ensemble Model ROC AUC Score: {:.2f}".format(rocauc))

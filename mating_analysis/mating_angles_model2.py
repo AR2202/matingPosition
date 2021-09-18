@@ -98,13 +98,13 @@ def mating_angle_from_body_axis(FemaleHeadX, FemaleHeadY,
                                 MaleHeadX, MaleHeadY,
                                 MaleAbdomenX, MaleAbdomenY):
     """determines mating angle from the head and abdomen position data"""
-    deltaxF = FemaleHeadX -  FemaleAbdomenX
-    deltayF = FemaleHeadY -  FemaleAbdomenY
-    deltaxM = MaleHeadX   -  MaleAbdomenX
-    deltayM = MaleHeadY   -  MaleAbdomenY
+    deltaxF = FemaleHeadX - FemaleAbdomenX
+    deltayF = FemaleHeadY - FemaleAbdomenY
+    deltaxM = MaleHeadX - MaleAbdomenX
+    deltayM = MaleHeadY - MaleAbdomenY
 
     femaleAngle = np.arctan(deltayF/deltaxF)
-    maleAngle   = np.arctan(deltayM/deltaxM)
+    maleAngle = np.arctan(deltayM/deltaxM)
 
     signDeltaxF = signDeltax2(deltaxF)
     if signDeltaxF == 0:
@@ -245,7 +245,8 @@ def filtered_outputs(path, P, removeWall=False, minWallDist=3):
                                          df, centroidx, centroidy), axis=1)
     if removeWall:
         dataF = dataF[distanceToCentroid < ((d/2)-minWallDist)]
-        rownumbers = rownumbers[distanceToCentroid < ((d/2)-minWallDist)]  #check if this is correct
+        rownumbers = rownumbers[distanceToCentroid < (
+            (d/2)-minWallDist)]  # check if this is correct
     angles_b = dataF.apply(mating_angle_from_cos_pd_df, axis=1)
     wing_dist_male = dataF.apply(wing_distance_male, axis=1)
     abd_dist = dataF.apply(abd_distance, axis=1)
