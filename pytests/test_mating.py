@@ -3,7 +3,6 @@ import math
 import pandas as pd
 import numpy as np
 import sys
-sys.path.append("./mating_analysis")
 import mating_angles_model2
 from mating_angles_model2 import signDeltax2, mating_angle_from_angles
 from mating_angles_model2 import mating_angle_from_body_axis
@@ -15,6 +14,8 @@ from mating_angles_model2 import tilting_index_all_frames
 from mating_angles_model2 import angle_from_cos, mating_angle_from_cos_pd_df
 from mating_angles_learn_model2 import scale_filtered, scale_unfiltered
 from mating_angles_learn_model2 import prepare_training_data
+sys.path.append("./mating_analysis")
+
 
 # this file contains the tests for the mating_angles_model2
 #
@@ -119,8 +120,10 @@ def test_filtered_outputs():
         6000, "there are rownumbers missing in the filtered dataset"
     assert rownumbers_filter08[0] ==\
         0, "rownumbers should be 0 based"
-    assert isinstance(rownumbers, np.ndarray), "rownumbers should be a numpy array"
-    assert isinstance(rownumbers_filter08, np.ndarray), "rownumbers should be a numpy array"
+    assert isinstance(
+        rownumbers, np.ndarray), "rownumbers should be a numpy array"
+    assert isinstance(rownumbers_filter08,
+                      np.ndarray), "rownumbers should be a numpy array"
 
 
 def test_removeWall_option():
@@ -137,8 +140,10 @@ def test_removeWall_option():
     assert 0 in rownumbers_r
     assert 12231 not in rownumbers_r
     assert 6000 in rownumbers_r
-    assert isinstance(rownumbers, np.ndarray), "rownumbers should be a numpy array"
-    assert isinstance(rownumbers_r, np.ndarray), "rownumbers_r should be a numpy array"
+    assert isinstance(
+        rownumbers, np.ndarray), "rownumbers should be a numpy array"
+    assert isinstance(
+        rownumbers_r, np.ndarray), "rownumbers_r should be a numpy array"
 
 
 def test_centroids():
