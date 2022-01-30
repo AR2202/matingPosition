@@ -10,7 +10,7 @@ from mating_angles_model2 import filtered_outputs, unfiltered_outputs
 from mating_angles_model2 import load_csv_file, tilting_index, tilting_index_all_frames
 from sklearn.linear_model import SGDClassifier, RidgeCV
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.feature_selection import SelectFromModel
+from sklearn.feature_selection import SelectFromModel, f_classif
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.svm import SVC, LinearSVC
@@ -99,7 +99,7 @@ def train_SGD(X, y, loss="log"):
         'sgd__alpha': (0.00001, 0.000001),
         'sgd__penalty': ('l2', 'elasticnet'),
     }
-    pipe = Pipeline([('anova', SelectPercentile(chi2)),
+    pipe = Pipeline([('anova', SelectPercentile(f_classif)),
                      ('sgd', SGDClassifier(
                          loss=loss,
                          max_iter=max_iter,
@@ -135,7 +135,7 @@ def train_SVC(X, y):
         {'svc__C': [1, 10, 100, 1000], 'svc__gamma': [0.001, 0.0001],
          'svc__kernel': ['rbf']},
     ]
-    pipe = Pipeline([('anova', SelectPercentile(chi2)),
+    pipe = Pipeline([('anova', SelectPercentile(f_classif)),
                      ('svc', SVC(probability=True))])
     grid_search = GridSearchCV(pipe, param_grid, verbose=1)
     supportV = grid_search.fit(X_train, y_train)
