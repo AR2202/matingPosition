@@ -19,7 +19,7 @@ from sklearn.model_selection import cross_val_score, GridSearchCV, train_test_sp
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.naive_bayes import GaussianNB
 from sklearn.ensemble import BaggingClassifier
-from sklearn.metrics import accuracy_score, balanced_accuracy_score, f1_score, log_loss, roc_auc_score
+from sklearn.metrics import accuracy_score, balanced_accuracy_score, f1_score, log_loss, precision_score, recall_score, roc_auc_score
 from joblib import dump, load
 # This is the machine learning model for DLC model2
 # expects the data to be created by a DLC model that labels both flies' Head
@@ -335,12 +335,15 @@ def learning_pipeline(paths_to_csv, paths_to_images, positives=[],
     f1 = f1_score(y_test, yPred)
     logloss = log_loss(y_test, yProb)
     rocauc = roc_auc_score(y_test, yProb)
-    print("Ensemble Model Accuracy Score: {}".format(accuracy))
-    print("Ensemble Model Balanced Accuracy Score: {}".format(balanced_accuracy))
-    print("Ensemble Model F1 Score: {}".format(f1))
-    print("Ensemble Model Log Loss Score: {}".format(logloss))
-    print("Ensemble Model ROC AUC Score: {}".format(rocauc))
-
+    precision = precision_score(y_test, yPred)
+    recall = recall_score(y_test, yPred)
+    print("Ensemble Model Accuracy Score on the test data of the train - test split: {}".format(accuracy))
+    print("Ensemble Model Balanced Accuracy Score on the test data of the train - test split: {}".format(balanced_accuracy))
+    print("Ensemble Model F1 Score on the test data of the train - test split: {}".format(f1))
+    print("Ensemble Model Log Loss Score on the test data of the train - test split: {}".format(logloss))
+    print("Ensemble Model ROC AUC Score on the test data of the train - test split: {}".format(rocauc))
+    print("Ensemble Model Precision Score on the test data of the train - test split: {}".format(precision))
+    print("Ensemble ModelRecall Score on the test data of the train - test split: {}".format(recall))
     if training_only:
         models = {
             "LogReg": {"model": logReg,
@@ -360,7 +363,9 @@ def learning_pipeline(paths_to_csv, paths_to_images, positives=[],
             "ensemble": {"accuracy": accuracy,
                          "F1": f1,
                          "LogLoss": logloss,
-                         "ROCAUC": rocauc}
+                         "ROCAUC": rocauc,
+                         "Precision": precision,
+                         "Recall": recall}
         }
     else:
         # making predictions for the data
@@ -409,7 +414,9 @@ def learning_pipeline(paths_to_csv, paths_to_images, positives=[],
                          "accuracy": accuracy,
                          "F1": f1,
                          "LogLoss": logloss,
-                         "ROCAUC": rocauc}
+                         "ROCAUC": rocauc,
+                         "Precision": precision,
+                         "Recall": recall}
         }
     dump(models, filename)
     return models
@@ -497,17 +504,26 @@ def evalulate_pretrained(paths_to_csv, paths_to_images, positives=[],
     f1 = f1_score(y_test, yPred)
     logloss = log_loss(y_test, yProb)
     rocauc = roc_auc_score(y_test, yProb)
+    precision = precision_score(y_test, yPred)
+    recall = recall_score(y_test, yPred)
+   
+    
     print("Ensemble Model Accuracy Score: {:.2f}".format(accuracy))
     print("Ensemble Model Balanced Accuracy Score: {:.2f}".format(
         balanced_accuracy))
     print("Ensemble Model F1 Score: {:.2f}".format(f1))
     print("Ensemble Model Log Loss Score: {:.2f}".format(logloss))
     print("Ensemble Model ROC AUC Score: {:.2f}".format(rocauc))
+    print("Ensemble Model Precision Score: {:.2f}".format(precision))
+    print("Ensemble Model Recall Score: {:.2f}".format(recall))
     scores = {"accuracy": accuracy,
               "balanced_accuracy": balanced_accuracy,
               "F1": f1,
               "LogLoss": logloss,
-              "ROCAUC": rocauc}
+              "ROCAUC": rocauc,
+              "Precision": precision,
+              "Recall": recall
+              }
     return scores
 
 # Regression Models
